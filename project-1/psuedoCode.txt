@@ -1,0 +1,44 @@
+- generate a grid.
+
+- prisoner starting point (hardcoded for now, might randomize in the future idk)
+
+- cop starting point (hardcoded for now, might randomize in the future idk)
+
+- one cell outside any of the 4 main grid set boundaries will be selected as the winning grid:
+    - win logic: 
+            if (landed on edge winning cell){
+                move towards winnig for victory
+            }
+
+                   Prison
+                   Escape
+             __________________
+            |   |    |    |    |
+            |___|____|____|____|  
+            |   |    |  P |    | 
+            |___|____|____|____|  
+            |   |    |    |    | 
+            |___|____|____|____|____  
+            |   |  C |    |    |      Winning cell
+            |___|____|____|____|____
+          
+
+                   Start
+
+                 Surrender
+
+- if P gets to winning cell before landing on the same cell as C: P wins
+- else if P lands on the same cell as C (cop catches the prisoner): P loses
+
+
+- Use keypress event listeners to control P
+- Create function to calculate minimum distance between P and C (in cells)
+    - remember last position of P
+    - pass column number and row number as int for P
+    - pass column number and row number as int for C 
+- C moves one cell in direction of P after previous function called.
+
+- Boundaries will exist to act as mazes or barriers to movement. (hardcoded for now, might randomize in the future idk)
+
+- start button starts game (populates P C and boundaries)
+- Surrender button restarts game (you lose by default)
