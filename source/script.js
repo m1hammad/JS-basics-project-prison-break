@@ -57,7 +57,7 @@ function prisonerMovement(key){
                     i -= 1
                     prisonerCurrentLocation.removeChild(prisonerCurrentLocation.lastElementChild)
                     prisonerPrepend(i,j)    // prisoner is always first element child
-                    winLossLogic(i,j)
+                    setTimeout(winLossLogic,200,i,j)
                     setTimeout(policeMovement,200,key,i,j)  // Reference: https://developer.mozilla.org/en-US/docs/Web/API/setTimeout
                     break
                 }
@@ -66,7 +66,7 @@ function prisonerMovement(key){
                     i += 1;
                     prisonerCurrentLocation.removeChild(prisonerCurrentLocation.lastElementChild)
                     prisonerPrepend(i,j)
-                    winLossLogic(i,j)
+                    setTimeout(winLossLogic,200,i,j)
                     setTimeout(policeMovement,200,key,i,j)
                     break
 
@@ -76,7 +76,7 @@ function prisonerMovement(key){
                     j += 1    
                     prisonerCurrentLocation.removeChild(prisonerCurrentLocation.lastElementChild)
                     prisonerPrepend(i,j)
-                    winLossLogic(i,j)
+                    setTimeout(winLossLogic,200,i,j)
                     setTimeout(policeMovement,200,key,i,j)
                     break
                 }
@@ -85,7 +85,7 @@ function prisonerMovement(key){
                     j -= 1
                     prisonerCurrentLocation.removeChild(prisonerCurrentLocation.lastElementChild)
                     prisonerPrepend(i,j)
-                    winLossLogic(i,j)
+                    setTimeout(winLossLogic,200,i,j)
                     setTimeout(policeMovement,200,key,i,j)
                     break
                 }
