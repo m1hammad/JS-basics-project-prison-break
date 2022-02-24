@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=ZCOOL+QingKe+HuangYou&display=swap');
+     </style>
     <link rel="stylesheet" href="./styles/style.css">
-    <title>Prison Escape</title>
+    <title>Prison Break</title>
 </head>
 <body>
-    <h1>Prison Escape</h1>
+    <h1>
+        <img src="./assets/screwHead.png" class="screwHead">
+        PRISON BREAK
+        <img src="./assets/screwHead.png" class="screwHead">
+    </h1>
     <div class="grid">
         <div id="_00" class="dark"></div>
         <div id="_01" class="light">
@@ -30,7 +37,7 @@
         </div>
         <div id="_13" class="dark">
             <!-- <img src="./assets/police.png" id="police" > -->
-            <img src="./assets/prisoner.png" id="prisoner">
+            <!-- <img src="./assets/prisoner.png" id="prisoner"> -->
         </div>
         <div id="_14" class="light"></div>
 
@@ -55,7 +62,7 @@
         </div>
         <div id="_32" class="light">
             <!-- <img src="./assets/prisoner.png" id="prisoner"> -->
-            <img src="./assets/police.png" id="police" >
+            <!-- <img src="./assets/police.png" id="police" > -->
         </div>
         <div id="_33" class="dark">
             <!-- <img src="./assets/police.png" id="police" > -->
@@ -76,14 +83,22 @@
             <!-- <img src="./assets/prisoner.png" id="prisoner"> -->
         </div>
         <div id="_44" class="dark">
-            <img src="./assets/key.png" id="key">
+            <!-- <img src="./assets/key.png" id="key"> -->
         </div>
     </div>
+    <div id="winLose">
+        <!-- <img src="./assets/youLose.png" id="lose">
+        <p id="loser">YOU LOSE</p> -->
+    </div>
+    <button id="begin">
+        <img src="./assets/screwHead.png" class="screwHeadInButton">
+        BEGIN
+        <img src="./assets/screwHead.png" class="screwHeadInButton">
+    </button>
     <script defer
     src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
     crossorigin="anonymous"></script>
     <script defer src="./source/script.js"></script>
-    <button>Begin</button>
 </body>
 </html>

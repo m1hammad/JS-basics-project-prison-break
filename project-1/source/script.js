@@ -9,8 +9,34 @@ const assets = {
     key: document.getElementById('key'),
     x : 5,
     y : 5,
+    button: document.querySelector('button'),
     priority: true,
     placeHolder: '',
+}
+
+
+
+assets.button.addEventListener('click', logger)
+
+function logger(evt){
+    if (evt.target.id === 'surrender'){
+        reset();
+        evt.target.id = 'begin'
+        evt.target.innerHTML = 
+        `<img src="./assets/screwHead.png" class="screwHeadInButton">
+        BEGIN
+        <img src="./assets/screwHead.png" class="screwHeadInButton">`
+    }
+    else if (evt.target.id === 'begin'){
+        prisonerPrepend(1,3)
+        policeAppend(3,2,'')
+        keyLocation(4,4)
+        evt.target.id = 'surrender'
+        evt.target.innerHTML = 
+        `<img src="./assets/screwHead.png" class="screwHeadInButton">
+        SURRENDER
+        <img src="./assets/screwHead.png" class="screwHeadInButton">`
+    }
 }
 
 document.addEventListener('keydown', logKey);
@@ -84,7 +110,7 @@ function policeMovement(k,a,b){
                         console.log('Accessed j > b in i > a')       // FOR TESTING... REMOVE LATER
                         
                         
-                        if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
+                        if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -93,7 +119,7 @@ function policeMovement(k,a,b){
                             console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1                                                        /*checks previous placement and avoids it*/
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -102,7 +128,7 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -111,7 +137,7 @@ function policeMovement(k,a,b){
                             console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1                                                
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -120,13 +146,22 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
+                            break
+                        }
                     }
                     else if(j < b){
 
                         console.log('Accessed j < b in i > a')       // FOR TESTING... REMOVE LATER
 
                         
-                        if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -135,7 +170,7 @@ function policeMovement(k,a,b){
                             console.log('rignt')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
+                        else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -144,7 +179,7 @@ function policeMovement(k,a,b){
                             console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -153,7 +188,7 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -162,12 +197,21 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
+                            break
+                        }
                     }
                     else if(j === b){
 
                         console.log('Accessed j === b in i > a')       // FOR TESTING... REMOVE LATER
 
-                        if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
+                        if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -176,7 +220,7 @@ function policeMovement(k,a,b){
                             console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -185,7 +229,7 @@ function policeMovement(k,a,b){
                             console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -194,13 +238,22 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
                             console.log('down')       // FOR TESTING... REMOVE LATER
+                            break
+                        }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
                             break
                         }
                     }
@@ -211,7 +264,7 @@ function policeMovement(k,a,b){
 
                         console.log('Accessed j > b in i < a')       // FOR TESTING... REMOVE LATER
 
-                        if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -220,7 +273,7 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -229,7 +282,7 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -238,13 +291,22 @@ function policeMovement(k,a,b){
                             console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.placeHolder !== `_${i-1}${j}`){
+                        else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
                             console.log('up')       // FOR TESTING... REMOVE LATER
+                            break
+                        }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
                             break
                         }
                     }
@@ -252,7 +314,7 @@ function policeMovement(k,a,b){
 
                         console.log('Accessed j > b in i < a')       // FOR TESTING... REMOVE LATER
 
-                        if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -261,7 +323,7 @@ function policeMovement(k,a,b){
                             console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -270,7 +332,7 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -279,13 +341,22 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.placeHolder !== `_${i-1}${j}`){
+                        else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
                             console.log('up')       // FOR TESTING... REMOVE LATER
+                            break
+                        }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
                             break
                         }
                     }
@@ -293,7 +364,7 @@ function policeMovement(k,a,b){
 
                         console.log('Accessed j === b in i < a')       // FOR TESTING... REMOVE LATER
 
-                        if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
+                        if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -302,7 +373,7 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -311,7 +382,7 @@ function policeMovement(k,a,b){
                             console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -320,13 +391,22 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.placeHolder !== `_${i-1}${j}`){
+                        else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
                             console.log('up')       // FOR TESTING... REMOVE LATER
+                            break
+                        }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
                             break
                         }
                     }
@@ -337,7 +417,7 @@ function policeMovement(k,a,b){
 
                         console.log('Accessed j > b in i === a')       // FOR TESTING... REMOVE LATER
 
-                        if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.priority && assets.placeHolder !== `_${i}${j-1}`){
+                        if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.priority && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -346,7 +426,7 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.placeHolder !== `_${i-1}${j}`){
+                        else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -355,7 +435,7 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -364,13 +444,22 @@ function policeMovement(k,a,b){
                             console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.placeHolder !== `_${i}${j+1}`){
+                        else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
                             console.log('right')       // FOR TESTING... REMOVE LATER
+                            break
+                        }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
                             break
                         }
                     }
@@ -378,7 +467,7 @@ function policeMovement(k,a,b){
 
                         console.log('Accessed j < b in i === a')       // FOR TESTING... REMOVE LATER
 
-                        if(!($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && j < 4 && assets.priority && assets.placeHolder !== `_${i}${j+1}`){
+                        if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.priority && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -387,7 +476,7 @@ function policeMovement(k,a,b){
                             console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderTop').includes('solid')) && i > 0 && assets.placeHolder !== `_${i-1}${j}`){
+                        else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -396,7 +485,7 @@ function policeMovement(k,a,b){
                             console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && i < 4 && assets.placeHolder !== `_${i+1}${j}`){
+                        else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -405,7 +494,7 @@ function policeMovement(k,a,b){
                             console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(!($(`#_${i}${j}`).css('borderLeft').includes('solid')) && j > 0 && assets.placeHolder !== `_${i}${j-1}`){
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
@@ -414,11 +503,28 @@ function policeMovement(k,a,b){
                             console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
+                        else{
+                            const ij = parseInt(assets.placeHolder.replace('_',''))
+                            i = parseInt(ij/10)
+                            j = ij%10
+                            policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
+                            policeAppend(i,j,k)
+                            assets.priority = false
+                            break
+                        }
+                        
                     }
                 }
             }
         }
     }
+}
+function keyLocation(a,b){
+    const newKeyImg = document.createElement('img')
+    newKeyImg.src = assets.keyImg
+    newKeyImg.id = 'key'
+    const keyNewLocation = document.getElementById(`_${a}${b}`)
+    keyNewLocation.appendChild(newKeyImg)
 }
 
 function prisonerPrepend(a,b){
@@ -443,30 +549,49 @@ function winLossLogic(x,y){
     const prisonerCheck = checkLocation.firstElementChild.id
     const winLossCheck = checkLocation.lastElementChild.id
     if(prisonerCheck === 'prisoner' && winLossCheck === 'police'){
-        setTimeout(alert,205,'you lose')              // FOR TESTING... REMOVE LATER
+        const loseImg = document.createElement('img')
+        loseImg.src = assets.loseScreenImg
+        loseImg.id = 'lose'
+        const loseMessage = document.createElement('p')
+        loseMessage.innerText = 'YOU LOSE'
+        loseMessage.id = 'loser'
+        $('.grid').css('display', 'none')
+        document.getElementById('winLose').appendChild(loseImg)
+        document.getElementById('winLose').appendChild(loseMessage)
+        $('#winLose').css('display', 'flex')
+        document.getElementById('surrender').innerHTML = 
+        `<img src="./assets/screwHead.png" class="screwHeadInButton">
+        RESTART
+        <img src="./assets/screwHead.png" class="screwHeadInButton">`
     }
     else if(prisonerCheck === 'prisoner' && winLossCheck === 'key'){
         checkLocation.removeChild(checkLocation.lastElementChild)
-        setTimeout(alert,205,'you win')              // FOR TESTING... REMOVE LATER
+        const winImg = document.createElement('img')
+        winImg.src = assets.winScreenImg
+        winImg.id = 'win'
+        const winMessage = document.createElement('p')
+        winMessage.innerText = 'YOU WIN'
+        winMessage.id = 'winner'
+        $('.grid').css('display', 'none')
+        document.getElementById('winLose').appendChild(winImg)
+        document.getElementById('winLose').appendChild(winMessage)
+        $('#winLose').css('display', 'flex')
+        document.getElementById('surrender').innerHTML = 
+        `<img src="./assets/screwHead.png" class="screwHeadInButton">
+        RESTART
+        <img src="./assets/screwHead.png" class="screwHeadInButton">`
     }
 }
 
-
-//                   GENERAL TESTING... 
-// console.log(!!document.getElementById('_12').childNodes[1])
-// console.log(document.getElementById('_12').firstElementChild.id)
-// document.getElementById('_12').removeChild(assets.prisoner)
-// console.log(!!document.getElementById('_12').firstElementChild)
-// newPrisonerImg = document.createElement('img')
-// newPrisonerImg.src = assets.prisonerImg
-// newPrisonerImg.id = 'prisoner'
-// document.getElementById('_11').appendChild(newPrisonerImg)
-// console.log(document.getElementById('_11').firstElementChild)
-// console.log(document.getElementById('_11').firstElementChild.id)
-// console.log(document.getElementById('_11').style.borderLeft)
-//         // non jQuery method
-// const test = document.getElementById('_11')
-// const test2  = window.getComputedStyle(test)
-// console.log(test2.borderLeft.includes('solid'))
-//         // jQuery method
-// !console.log($('#_11').css('borderLeft').includes('solid'))
+function reset(){
+    for(let i = 0; i < assets.y; i++){
+        for(let j = 0; j < assets.x; j++){
+            document.getElementById(`_${i}${j}`).innerHTML = ''
+        }
+    }
+    assets.priority = true
+    assets.placeHolder = ''
+    document.getElementById('winLose').innerHTML = ''
+    $('#winLose').css('display', 'none')
+    $('.grid').css('display', 'grid')
+}
