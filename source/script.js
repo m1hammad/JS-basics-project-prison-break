@@ -3,7 +3,7 @@ const assets = {
     policeImg: "./assets/police.png",
     keyImg: "./assets/key.png",
     winScreenImg: "./assets/youWin.png",
-    loseScreenImg: "./assets/youlose.png",
+    loseScreenImg: "./assets/youLose.png",
     prisoner: document.getElementById('prisoner'),
     police: document.getElementById('police'),
     key: document.getElementById('key'),
