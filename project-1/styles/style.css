@@ -17,7 +17,6 @@
 
 html{
     height: 100%;
-    /* border: 2px solid black; */
     background: url("cssAsset/background.jpeg");
     -webkit-background-size:center;
     -moz-background-size: center;
@@ -49,6 +48,7 @@ h1{
     height:600px;
     justify-content: center;
 } 
+/* display win lose popup */
 #winLose{
     margin: 60px auto;
     display: none;
@@ -126,8 +126,6 @@ button{
     margin:auto;
     padding-top: 3px;
     padding-bottom: 3px;
-    /* padding-left: 15px;
-    padding-right: 15px; */
     width: 200px;
     background-color:#8cc751 ;
     border-top:1.5px solid black;

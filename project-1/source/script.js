@@ -16,19 +16,19 @@ const assets = {
 
 
 
-assets.button.addEventListener('click', logger)
+assets.button.addEventListener('click', gameStart)
 
-function logger(evt){
+function gameStart(evt){
     if (evt.target.id === 'surrender'){
         reset();
         evt.target.id = 'begin'
-        evt.target.innerHTML = 
+        evt.target.innerHTML =   // changes button name
         `<img src="./assets/screwHead.png" class="screwHeadInButton">
         BEGIN
         <img src="./assets/screwHead.png" class="screwHeadInButton">`
     }
     else if (evt.target.id === 'begin'){
-        prisonerPrepend(1,3)
+        prisonerPrepend(1,3)    // can be randomized in later iterations
         policeAppend(3,2,'')
         keyLocation(4,4)
         evt.target.id = 'surrender'
@@ -51,19 +51,16 @@ function prisonerMovement(key){
     for(let i = 0; i < assets.y; i++){
         for(let j= 0; j < assets.x; j++){
             const prisonerCurrentLocation = document.getElementById(`_${i}${j}`)
-
             if(!!prisonerCurrentLocation.lastElementChild && prisonerCurrentLocation.lastElementChild.id === 'prisoner'){
-
                 if (key === "ArrowUp" && i !== 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid'))){  
                                                    /* ^ above line of code is border collision logic ^ */  
                     i -= 1
                     prisonerCurrentLocation.removeChild(prisonerCurrentLocation.lastElementChild)
-                    prisonerPrepend(i,j)
+                    prisonerPrepend(i,j)    // prisoner is always first element child
                     winLossLogic(i,j)
                     setTimeout(policeMovement,200,key,i,j)  // Reference: https://developer.mozilla.org/en-US/docs/Web/API/setTimeout
                     break
                 }
-
                 else if (key === "ArrowDown" && i !== 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid'))){ 
                                                           /* ^ above line of code is border collision logic ^ */     
                     i += 1;
@@ -74,7 +71,6 @@ function prisonerMovement(key){
                     break
 
                 }
-
                 else if (key === "ArrowRight" && j !== 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid'))){     
                                                             /* ^ above line of code is border collision logic ^ */  
                     j += 1    
@@ -84,7 +80,6 @@ function prisonerMovement(key){
                     setTimeout(policeMovement,200,key,i,j)
                     break
                 }
-
                 else if (key === "ArrowLeft" && j !== 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid'))){      
                                                           /* ^ above line of code is border collision logic ^ */     
                     j -= 1
@@ -106,26 +101,20 @@ function policeMovement(k,a,b){
             if(!!policeCurrentLocation.lastElementChild && policeCurrentLocation.lastElementChild.id === 'police' && i >= 0 && i <= 4  && j <= 4  && j >= 0){
                 if(i > a){
                     if(j > b){
-
-                        console.log('Accessed j > b in i > a')       // FOR TESTING... REMOVE LATER
-                        
-                        
-                        if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
+                        if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){                                              /* to check if cop moved to low priority (can't move back to this will go to second priority instead)*/
                             i -= 1
-                            assets.placeHolder = policeCurrentLocation.id
+                            assets.placeHolder = policeCurrentLocation.id       // to prevent cop from returning to cell its already been in
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
-                            j -= 1                                                        /*checks previous placement and avoids it*/
+                        else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){                                                                     /*checks previous placement and avoids it*/
+                            j -= 1                                                        
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
@@ -134,7 +123,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
@@ -143,10 +131,9 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
-                        else{
+                        else{   //if no other movement present move back to previous cell
                             const ij = parseInt(assets.placeHolder.replace('_',''))
                             i = parseInt(ij/10)
                             j = ij%10
@@ -157,17 +144,12 @@ function policeMovement(k,a,b){
                         }
                     }
                     else if(j < b){
-
-                        console.log('Accessed j < b in i > a')       // FOR TESTING... REMOVE LATER
-
-                        
                         if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('rignt')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
@@ -176,7 +158,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
@@ -185,7 +166,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
@@ -194,7 +174,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -203,21 +182,16 @@ function policeMovement(k,a,b){
                             j = ij%10
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
-                            assets.priority = false
                             break
                         }
                     }
                     else if(j === b){
-
-                        console.log('Accessed j === b in i > a')       // FOR TESTING... REMOVE LATER
-
                         if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i-1}${j}`){
                             i -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
@@ -226,7 +200,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
@@ -235,7 +208,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
@@ -244,7 +216,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -261,16 +232,12 @@ function policeMovement(k,a,b){
 
                 else if(i < a){
                     if(j > b){
-
-                        console.log('Accessed j > b in i < a')       // FOR TESTING... REMOVE LATER
-
                         if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
                             j -= 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
@@ -279,7 +246,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
@@ -288,7 +254,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
@@ -297,7 +262,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -311,16 +275,12 @@ function policeMovement(k,a,b){
                         }
                     }
                     else if(j < b){
-
-                        console.log('Accessed j > b in i < a')       // FOR TESTING... REMOVE LATER
-
                         if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
                             j += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
@@ -329,7 +289,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
@@ -338,7 +297,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
@@ -347,7 +305,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -361,16 +318,12 @@ function policeMovement(k,a,b){
                         }
                     }
                     else if(j === b){
-
-                        console.log('Accessed j === b in i < a')       // FOR TESTING... REMOVE LATER
-
                         if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.priority && assets.placeHolder !== `_${i+1}${j}`){
                             i += 1
                             assets.placeHolder = policeCurrentLocation.id
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
@@ -379,7 +332,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
@@ -388,7 +340,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
@@ -397,7 +348,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -423,7 +373,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
@@ -432,7 +381,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
@@ -441,7 +389,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j < 4 && !($(`#_${i}${j+1}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j+1}`){
@@ -450,7 +397,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -473,7 +419,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('right')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i > 0 && !($(`#_${i}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i-1}${j}`){
@@ -482,7 +427,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('up')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(i < 4 && !($(`#_${i+1}${j}`).css('borderTop').includes('solid')) && assets.placeHolder !== `_${i+1}${j}`){
@@ -491,7 +435,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = true
-                            console.log('down')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else if(j > 0 && !($(`#_${i}${j}`).css('borderLeft').includes('solid')) && assets.placeHolder !== `_${i}${j-1}`){
@@ -500,7 +443,6 @@ function policeMovement(k,a,b){
                             policeCurrentLocation.removeChild(policeCurrentLocation.lastElementChild)
                             policeAppend(i,j,k)
                             assets.priority = false
-                            console.log('left')       // FOR TESTING... REMOVE LATER
                             break
                         }
                         else{
@@ -541,7 +483,7 @@ function policeAppend(a,b,k){
     newPoliceImg.id = 'police'
     const policeNewLocation = document.getElementById(`_${a}${b}`)
     policeNewLocation.appendChild(newPoliceImg)
-    k = ''
+    k = ''      // set key back to null so it doesn't run an if statement with the same key input without having key pressed
 }
 
 function winLossLogic(x,y){
